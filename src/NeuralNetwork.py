@@ -44,9 +44,12 @@ def build_nn_model(
 
 
 def run_nn_experiment(
-    epochs: int = 20,
-    batch_size: int = 32,
-    threshold: float = 0.5,
+        epochs: int = 20,
+        batch_size: int = 32,
+        hidden_units1: int = 32,
+        hidden_units2: int = 16,
+        learning_rate: float = 0.001,
+        threshold: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, keras.Model]:
 
     print("Loading and preparing data (NN)...")
@@ -65,7 +68,11 @@ def run_nn_experiment(
     print(f"Input dimension after preprocessing: {input_dim}")
 
     print("Building Neural Network model...")
-    model = build_nn_model(input_dim=input_dim)
+    model = build_nn_model(
+        input_dim=input_dim,
+        hidden_units1=hidden_units1,
+        hidden_units2=hidden_units2,
+        learning_rate=learning_rate,)
 
     print("Training Neural Network model...")
     callbacks = [

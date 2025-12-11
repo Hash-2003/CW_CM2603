@@ -88,7 +88,12 @@ def main():
 )
 
     print("Running Neural Network experiment for evaluation...")
-    y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment()
+    y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment(
+        hidden_units1=32,
+        hidden_units2=16,
+        learning_rate=0.0005,
+        batch_size=64,
+    )
 
     if len(y_test_tree) != len(y_test_nn):
         print("Warning: tree and NN test sets have different lengths.")

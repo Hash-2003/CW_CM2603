@@ -52,6 +52,6 @@ def tune_decision_tree():
 
 
 if __name__ == "__main__":
-    # Debug / manual run
+    # manual run
     best_model, best_params = tune_decision_tree()
     print("\nBest parameters (for final model):", best_params)
