@@ -1,6 +1,8 @@
 from typing import Tuple
-
+import os
+import random
 from sklearn.utils.class_weight import compute_class_weight
+import tensorflow as tf
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -9,6 +11,15 @@ from preprocess import (
     build_nn_preprocessor,
     prepare_nn_data,
 )
+
+SEED = 2025
+
+os.environ["PYTHONHASHSEED"] = str(SEED)
+os.environ["TF_DETERMINISTIC_OPS"] = "1"
+
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
 def build_nn_model(
     input_dim: int,

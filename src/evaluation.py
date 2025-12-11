@@ -100,7 +100,7 @@ def main():
         hidden_units2=16,
         learning_rate=0.0005,
         batch_size=32,
-        dropout_rate=0.0,
+        dropout_rate=0.1,
         l2_reg=0.0,
     )
 

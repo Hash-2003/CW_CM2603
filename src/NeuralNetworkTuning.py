@@ -1,4 +1,7 @@
 import numpy as np
+import tensorflow as tf
+import os
+import random
 from tensorflow import keras
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
@@ -9,6 +12,15 @@ from preprocess import (
     build_nn_preprocessor,
     prepare_nn_data,
 )
+
+SEED = 2025
+
+os.environ["PYTHONHASHSEED"] = str(SEED)
+os.environ["TF_DETERMINISTIC_OPS"] = "1"
+
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
 
 def build_model(input_dim, units1, units2, lr, dropout_rate, l2_reg):
