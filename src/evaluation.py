@@ -9,7 +9,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-from DescisionTree import run_tree_experiment
+from DecisionTree import run_tree_experiment
 from NeuralNetwork import run_nn_experiment
 
 
@@ -80,7 +80,12 @@ def print_comparison(tree_metrics: Dict[str, Any], nn_metrics: Dict[str, Any]) -
 def main():
 
     print("Running Decision Tree experiment for evaluation...")
-    y_test_tree, y_pred_tree, y_prob_tree, _ = run_tree_experiment()
+    y_test_tree, y_pred_tree, y_prob_tree, _ = run_tree_experiment(
+    max_depth=5,
+    min_samples_split=50,
+    min_samples_leaf=10,
+    class_weight="balanced",
+)
 
     print("Running Neural Network experiment for evaluation...")
     y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment()
