@@ -80,10 +80,10 @@ def print_comparison(tree_metrics: Dict[str, Any], nn_metrics: Dict[str, Any]) -
 def main():
 
     print("Running Decision Tree experiment for evaluation...")
-    y_test_tree, y_pred_tree, y_prob_tree, _ = run_tree_experiment(debug=False)
+    y_test_tree, y_pred_tree, y_prob_tree, _ = run_tree_experiment()
 
     print("Running Neural Network experiment for evaluation...")
-    y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment(debug=False)
+    y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment()
 
     if len(y_test_tree) != len(y_test_nn):
         print("Warning: tree and NN test sets have different lengths.")
