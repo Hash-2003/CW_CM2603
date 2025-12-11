@@ -11,7 +11,10 @@ from sklearn.metrics import (
 
 from DecisionTree import run_tree_experiment
 from NeuralNetwork import run_nn_experiment
-
+from preprocess import(
+    load_and_prepare_data,
+    split_data
+)
 
 def evaluate_classification(
     y_true: np.ndarray,
@@ -78,9 +81,12 @@ def print_comparison(tree_metrics: Dict[str, Any], nn_metrics: Dict[str, Any]) -
 
 
 def main():
+    X, y = load_and_prepare_data()
+    X_train, X_test, y_train, y_test = split_data(X, y)
 
     print("Running Decision Tree experiment for evaluation...")
     y_test_tree, y_pred_tree, y_prob_tree, _ = run_tree_experiment(
+    X_train, X_test, y_train, y_test,
     max_depth=5,
     min_samples_split=50,
     min_samples_leaf=10,
@@ -89,10 +95,13 @@ def main():
 
     print("Running Neural Network experiment for evaluation...")
     y_test_nn, y_pred_nn, y_prob_nn, _ = run_nn_experiment(
+        X_train, X_test, y_train, y_test,
         hidden_units1=32,
         hidden_units2=16,
         learning_rate=0.0005,
-        batch_size=64,
+        batch_size=32,
+        dropout_rate=0.0,
+        l2_reg=0.0,
     )
 
     if len(y_test_tree) != len(y_test_nn):

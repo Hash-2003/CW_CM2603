@@ -41,17 +41,15 @@ def build_decision_tree_model(
 
 
 def run_tree_experiment(
+    X_train,
+    X_test,
+    y_train,
+    y_test,
     max_depth: int | None = None,
     min_samples_split: int = 2,
     min_samples_leaf: int = 1,
     class_weight: str | None = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Pipeline]:
-
-    print("Loading and preparing data...")
-    X, y = load_and_prepare_data()
-
-    print("Splitting into train and test sets...")
-    X_train, X_test, y_train, y_test = split_data(X, y)
 
     print("Building Decision Tree model...")
     model = build_decision_tree_model(

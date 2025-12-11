@@ -1,12 +1,11 @@
 from typing import Tuple
 
+from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
 
 from preprocess import (
-    load_and_prepare_data,
-    split_data,
     build_nn_preprocessor,
     prepare_nn_data,
 )
@@ -16,6 +15,8 @@ def build_nn_model(
     hidden_units1: int = 32,
     hidden_units2: int = 16,
     learning_rate: float = 0.001,
+    dropout_rate: float = 0.0,
+    l2_reg: float = 0.0,
 ) -> keras.Model:
     """
     feed-forward neural network (MLP)
@@ -23,11 +24,14 @@ def build_nn_model(
     Input -> Dense(32, ReLU) -> Dense(16, ReLU) -> Dense(1, Sigmoid)
 
     """
+    regularizer = keras.regularizers.l2(l2_reg) if l2_reg > 0 else None
+
     model = keras.Sequential(
         [
             layers.Input(shape=(input_dim,)),
             layers.Dense(hidden_units1, activation="relu"),
             layers.Dense(hidden_units2, activation="relu"),
+            layers.Dropout(dropout_rate),
             layers.Dense(1, activation="sigmoid"),  # binary output
         ]
     )
@@ -44,19 +48,19 @@ def build_nn_model(
 
 
 def run_nn_experiment(
-        epochs: int = 20,
-        batch_size: int = 32,
-        hidden_units1: int = 32,
-        hidden_units2: int = 16,
-        learning_rate: float = 0.001,
-        threshold: float = 0.5,
+    X_train,
+    X_test,
+    y_train,
+    y_test,
+    epochs: int = 20,
+    batch_size: int = 32,
+    hidden_units1: int = 32,
+    hidden_units2: int = 16,
+    learning_rate: float = 0.001,
+    dropout_rate: float = 0.0,
+    l2_reg: float = 0.0,
+    threshold: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, keras.Model]:
-
-    print("Loading and preparing data (NN)...")
-    X, y = load_and_prepare_data()
-
-    print("Splitting into train and test sets...")
-    X_train, X_test, y_train, y_test = split_data(X, y)
 
     print("Building NN preprocessing pipeline...")
     preprocessor = build_nn_preprocessor(X_train)
@@ -72,7 +76,9 @@ def run_nn_experiment(
         input_dim=input_dim,
         hidden_units1=hidden_units1,
         hidden_units2=hidden_units2,
-        learning_rate=learning_rate,)
+        learning_rate=learning_rate,
+        dropout_rate=dropout_rate,
+        l2_reg=l2_reg,)
 
     print("Training Neural Network model...")
     callbacks = [
@@ -83,6 +89,19 @@ def run_nn_experiment(
         )
     ]
 
+    class_weights_array = compute_class_weight(
+        class_weight="balanced",
+        classes=np.array([0, 1]),
+        y=y_train.to_numpy() if hasattr(y_train, "to_numpy") else y_train
+    )
+
+    class_weight = {
+        0: class_weights_array[0],
+        1: class_weights_array[1],
+    }
+
+    print("Using class weights:", class_weight)
+
     model.fit(
         X_train_nn,
         y_train,
@@ -90,6 +109,7 @@ def run_nn_experiment(
         epochs=epochs,
         batch_size=batch_size,
         callbacks=callbacks,
+        class_weight=class_weight,
         verbose=1,
     )
 
