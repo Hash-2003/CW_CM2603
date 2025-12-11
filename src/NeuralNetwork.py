@@ -19,26 +19,10 @@ def build_nn_model(
     learning_rate: float = 0.001,
 ) -> keras.Model:
     """
-    Build a feed-forward neural network (MLP) for binary churn prediction.
+    feed-forward neural network (MLP)
 
-    Architecture:
-        Input -> Dense(32, ReLU) -> Dense(16, ReLU) -> Dense(1, Sigmoid)
+    Input -> Dense(32, ReLU) -> Dense(16, ReLU) -> Dense(1, Sigmoid)
 
-    Parameters
-    ----------
-    input_dim : int
-        Number of input features after preprocessing.
-    hidden_units1 : int
-        Number of units in the first hidden layer.
-    hidden_units2 : int
-        Number of units in the second hidden layer.
-    learning_rate : float
-        Learning rate for the Adam optimizer.
-
-    Returns
-    -------
-    model : keras.Model
-        Compiled Keras model ready for training.
     """
     model = keras.Sequential(
         [
@@ -66,39 +50,7 @@ def run_nn_experiment(
     debug: bool = False,
     threshold: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, keras.Model]:
-    """
-    Full workflow for the Neural Network model:
 
-      1. Load and clean data (from preprocess.py)
-      2. Split into train/test
-      3. Build NN preprocessing and transform to dense arrays
-      4. Build and train the NN model
-      5. Predict probabilities and binary labels on the test set
-      6. (Optionally) print evaluation metrics for debugging
-
-    Parameters
-    ----------
-    epochs : int
-        Maximum number of training epochs.
-    batch_size : int
-        Batch size for training.
-    debug : bool
-        If True, prints evaluation metrics using evaluation.py.
-        If False, returns results silently (for evaluation.py to handle).
-    threshold : float
-        Classification threshold for converting probabilities to 0/1.
-
-    Returns
-    -------
-    y_test : np.ndarray
-        True labels for the test set.
-    y_pred_binary : np.ndarray
-        Predicted binary labels (0/1) for the test set.
-    y_prob : np.ndarray
-        Predicted probabilities (between 0 and 1) for the positive class.
-    model : keras.Model
-        Trained Keras model (can be reused or saved).
-    """
     print("Loading and preparing data (NN)...")
     X, y = load_and_prepare_data()
 
