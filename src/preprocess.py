@@ -20,7 +20,7 @@ def load_and_prepare_data(csv_path: str = "../data/WA_Fn-UseC_-Telco-Customer-Ch
     return X, y
 
 #train and test split
-def split_data(X, y, test_size: float = 0.2, random_state: int = 42):
+def split_data(X, y, test_size: float = 0.2, random_state: int = 2025):
     """
     Train/test split to preserve churn imbalance.
     """

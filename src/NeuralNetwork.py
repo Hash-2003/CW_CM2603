@@ -3,7 +3,6 @@ from typing import Tuple
 import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
 from preprocess import (
     load_and_prepare_data,
@@ -47,7 +46,6 @@ def build_nn_model(
 def run_nn_experiment(
     epochs: int = 20,
     batch_size: int = 32,
-    debug: bool = False,
     threshold: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, keras.Model]:
 
@@ -78,7 +76,7 @@ def run_nn_experiment(
         )
     ]
 
-    history = model.fit(
+    model.fit(
         X_train_nn,
         y_train,
         validation_data=(X_test_nn, y_test),
@@ -92,21 +90,4 @@ def run_nn_experiment(
     y_prob = model.predict(X_test_nn).ravel()
     y_pred_binary = (y_prob >= threshold).astype(int)
 
-    if debug:
-        acc = accuracy_score(y_test, y_pred_binary)
-        prec = precision_score(y_test, y_pred_binary, zero_division=0)
-        rec = recall_score(y_test, y_pred_binary, zero_division=0)
-        f1 = f1_score(y_test, y_pred_binary, zero_division=0)
-
-        print("=== Neural Network (debug evaluation) ===")
-        print(f"Accuracy : {acc:.4f}")
-        print(f"Precision: {prec:.4f}")
-        print(f"Recall   : {rec:.4f}")
-        print(f"F1-score : {f1:.4f}")
-
-    # return values so evaluation.py can use them later
     return y_test.to_numpy(), y_pred_binary, y_prob, model
-
-if __name__ == "__main__":
-    # Debug run for you during development. Safe to ignore/remove later.
-    run_nn_experiment(debug=True)
