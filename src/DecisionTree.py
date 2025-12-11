@@ -16,6 +16,8 @@ def build_decision_tree_model(
     X_train: pd.DataFrame,
     max_depth: int | None = None,
     min_samples_split: int = 2,
+    min_samples_leaf: int = 1,
+    class_weight: str | None = None,
     random_state: int = 2025,
 ) -> Pipeline:
     preprocessor = build_tree_preprocessor(X_train)
@@ -23,6 +25,8 @@ def build_decision_tree_model(
     tree_clf = DecisionTreeClassifier(
         max_depth=max_depth,
         min_samples_split=min_samples_split,
+        min_samples_leaf=min_samples_leaf,
+        class_weight=class_weight,
         random_state=random_state,
     )
 
@@ -39,6 +43,8 @@ def build_decision_tree_model(
 def run_tree_experiment(
     max_depth: int | None = None,
     min_samples_split: int = 2,
+    min_samples_leaf: int = 1,
+    class_weight: str | None = None,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Pipeline]:
 
     print("Loading and preparing data...")
@@ -52,6 +58,8 @@ def run_tree_experiment(
         X_train=X_train,
         max_depth=max_depth,
         min_samples_split=min_samples_split,
+        min_samples_leaf=min_samples_leaf,
+        class_weight=class_weight,
     )
 
     print("Training model...")
